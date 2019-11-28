@@ -36,13 +36,18 @@ public class CannonFodder extends Application {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
+
+
         Cannon cannon = new Cannon();
+
+        //cannon.setCannonBall();
 
         new AnimationTimer() {
             public void handle(long now) {
                 gc.setFill(Color.BLACK);
                 gc.fillRect(0, 0, windowWidth, windowHeight);
                 cannon.renderCannon(gc, mainScene);
+                //cannon.renderCannonBall(gc, mainScene);
 
             }
         }.start();

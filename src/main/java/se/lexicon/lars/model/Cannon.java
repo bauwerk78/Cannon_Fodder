@@ -5,36 +5,42 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import se.lexicon.lars.CannonFodder;
 
 import java.util.ArrayList;
 
 public class Cannon {
 
-    Image cannonImage;
+    private Image cannonImage;
+    private Circle circle;
     private ArrayList<String> input = new ArrayList<String>();
     private double positionX;
     private double positionY;
     private double imageWidth;
     private double imageHeight;
-    private double speed;
+    private double cannonSpeed;
+    private double cannonBallSpeed;
     private double windowWidth = CannonFodder.windowWidth;
     private double windowHeight = CannonFodder.windowHeight;
-
+    private double cannonBallX;
+    private double cannonBallY;
 
     public Cannon() {
         setCannonImage();
+        setCannonBall();
         positionX = (windowWidth / 2);
         positionY = windowHeight - imageHeight - 50;
-        speed = 5;
+        cannonSpeed = 5;
 
     }
 
-    public Cannon(double positionX, double positionY, double speed) {
+    public Cannon(double positionX, double positionY, double cannonSpeed) {
+        setCannonImage();
         this.positionX = positionX;
         this.positionY = positionY;
-        this.speed = speed;
-        setCannonImage();
+        this.cannonSpeed = cannonSpeed;
 
     }
 
@@ -61,18 +67,21 @@ public class Cannon {
     private void moveCannon(Scene scene) {
         getPlayerInput(scene);
         if (input.contains("RIGHT")) {
-            if (positionX + speed + imageWidth > windowWidth - 1) {
+            if (positionX + cannonSpeed + imageWidth > windowWidth - 1) {
                 positionX = (windowWidth - 1) - imageWidth;
             } else {
-                positionX = positionX + speed;
+                positionX = positionX + cannonSpeed;
             }
         }
         if (input.contains("LEFT")) {
-            if (positionX - speed < 0) {
+            if (positionX - cannonSpeed < 0) {
                 positionX = 0;
             } else {
-                positionX = positionX - speed;
+                positionX = positionX - cannonSpeed;
             }
+        }
+        if(input.contains("SPACE")) {
+            System.out.println("Firing on target!");
         }
     }
 
@@ -81,12 +90,29 @@ public class Cannon {
         cannonImage = new Image("file:Images/cannon2.png", 50, 50, false, false);
         imageWidth = cannonImage.getWidth();
         imageHeight = cannonImage.getHeight();
-        System.out.println(imageWidth + " " + imageHeight);
     }
 
     public void renderCannon(GraphicsContext gc, Scene scene) {
         moveCannon(scene);
         gc.drawImage(cannonImage, getPositionX(), getPositionY());
+    }
+
+    public void renderCannonBall(GraphicsContext gc, Scene scene) {
+        //setCannonBall();
+        //gc.fillOval();
+
+
+
+
+    }
+
+    public void setCannonBall() {
+        circle = new Circle();
+        circle.setCenterX(positionX);
+        circle.setCenterY(positionY);
+        circle.setRadius(20);
+        circle.setFill(Color.RED);
+        cannonBallSpeed = 10;
     }
 
 
