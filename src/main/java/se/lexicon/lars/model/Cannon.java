@@ -1,6 +1,7 @@
 package se.lexicon.lars.model;
 
 import javafx.event.EventHandler;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
@@ -24,11 +25,11 @@ public class Cannon {
     private double imageWidth;
     private double imageHeight;
     private double cannonSpeed;
-    private double cannonBallSpeed;
     private double windowWidth = CannonFodder.windowWidth;
     private double windowHeight = CannonFodder.windowHeight;
     private double cannonBallX;
     private double cannonBallY;
+    private double cannonBallSpeed;
     private boolean cannonBall = false;
     private double cannonBallWidth;
     private double cannonBallHeight;
@@ -50,6 +51,15 @@ public class Cannon {
 
     }
 
+    private Rectangle2D getBoundary() {
+        return new Rectangle2D(getPositionX(), getPositionY(), getImageWidth(), getImageHeight());
+    }
+    //If cannon collides with fodder.
+    public boolean collisionDetection(Fodder fodder) {
+        return getBoundary().intersects(fodder.getPositionX(), fodder.getPositionY(), fodder.getImageWidth(), fodder.getImageHeight());
+    }
+
+
     private void getPlayerInput(Scene scene) {
         scene.setOnKeyPressed(
                 new EventHandler<KeyEvent>() {
@@ -70,7 +80,7 @@ public class Cannon {
 
     }
 
-    private void moveCannon(Group group, Scene scene, GraphicsContext gc) {
+    private void moveCannon(Scene scene, GraphicsContext gc) {
         getPlayerInput(scene);
         if (input.contains("RIGHT")) {
             if (positionX + cannonSpeed + imageWidth > windowWidth - 1) {
@@ -87,21 +97,18 @@ public class Cannon {
             }
         }
         if(input.contains("SPACE") && !isCannonBall()) {
-            setCannonBallCircle(group, gc);
+            setCannonBallCircle(gc);
             System.out.println("Firing on target!");
             setCannonBall(true);
 
         }
     }
 
-    private void moveCannonBall(GraphicsContext gc) {
-        //circle.setCenterY(getCannonBallY() - getCannonBallSpeed());
+    private void moveCannonBall() {
         if(getCannonBallY() < 0) {
             setCannonBall(false);
         } else {
             setCannonBallY(getCannonBallY() - getCannonBallSpeed());
-            gc.setFill(Color.RED);
-            gc.fillOval(getCannonBallX(), getCannonBallY(), getCannonBallWidth(), getCannonBallHeight());
         }
     }
 
@@ -111,26 +118,26 @@ public class Cannon {
         imageHeight = cannonImage.getHeight();
     }
 
-    public void renderCannon(GraphicsContext gc, Scene scene, Group group) {
-        moveCannon(group, scene, gc);
+    public void renderCannon(GraphicsContext gc, Scene scene) {
+        moveCannon(scene, gc);
         gc.drawImage(cannonImage, getPositionX(), getPositionY());
     }
 
     public void renderCannonBall(GraphicsContext gc) {
-        //setCannonBall();
-        //gc.fillOval();
-        moveCannonBall(gc);
+        moveCannonBall();
+        gc.setFill(Color.RED);
+        gc.fillOval(getCannonBallX(), getCannonBallY(), getCannonBallWidth(), getCannonBallHeight());
     }
 
-    public void setCannonBallCircle(Group group, GraphicsContext gc) {
+    public void setCannonBallCircle(GraphicsContext gc) {
         setCannonBallX(getPositionX() + (imageWidth / 2) - 7);
         setCannonBallY(getPositionY());
         setCannonBallWidth(10);
         setCannonBallHeight(10);
-        //circle = new Circle(getCannonBallX() + (imageWidth / 2) - 2, getCannonBallY(), 4, Color.RED);
         setCannonBallSpeed(3);
         gc.setFill(Color.RED);
         gc.fillOval(getCannonBallX(), getCannonBallY(), getCannonBallWidth(), getCannonBallHeight());
+
         //group.getChildren().add(circle);
 /*        circle.setCenterX(positionX);
         circle.setCenterY(positionY);
