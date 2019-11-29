@@ -41,8 +41,8 @@ public class Fodder {
 
     private void setFodderImage() {
         fodderImage = new Image("file:Images/rambo1.png", 50, 50, false, false);
-        imageWidth = fodderImage.getWidth();
-        imageHeight = fodderImage.getHeight();
+        setImageWidth(fodderImage.getWidth());
+        setImageHeight(fodderImage.getHeight());
     }
 
     private void moveFodder() {

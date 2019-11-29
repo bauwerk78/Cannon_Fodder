@@ -37,9 +37,9 @@ public class Cannon {
     public Cannon() {
         setCannonImage();
         //setCannonBall();
-        positionX = (windowWidth / 2);
-        positionY = windowHeight - imageHeight - 50;
-        cannonSpeed = 5;
+        setPositionX((windowWidth / 2));
+        setPositionY(windowHeight - imageHeight - 50);
+        setCannonSpeed(5);
 
     }
 
@@ -143,6 +143,16 @@ public class Cannon {
         circle.setCenterY(positionY);
         circle.setRadius(20);
         circle.setFill(Color.RED);*/
+    }
+
+
+
+    public double getCannonSpeed() {
+        return cannonSpeed;
+    }
+
+    public void setCannonSpeed(double cannonSpeed) {
+        this.cannonSpeed = cannonSpeed;
     }
 
     public double getCannonBallWidth() {
