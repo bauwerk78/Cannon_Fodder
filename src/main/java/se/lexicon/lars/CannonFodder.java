@@ -39,14 +39,20 @@ public class CannonFodder extends Application {
 
 
         Cannon cannon = new Cannon();
-
+        //cannon.setCannonBallCircle(root);
+        cannon.setCannonBallCircle(root, gc);
         //cannon.setCannonBall();
 
         new AnimationTimer() {
             public void handle(long now) {
                 gc.setFill(Color.BLACK);
                 gc.fillRect(0, 0, windowWidth, windowHeight);
-                cannon.renderCannon(gc, mainScene);
+
+                cannon.renderCannon(gc, mainScene, root);
+                if(cannon.isCannonBall()) {
+                    cannon.renderCannonBall(gc);
+                }
+
                 //cannon.renderCannonBall(gc, mainScene);
 
             }
