@@ -8,6 +8,7 @@ import se.lexicon.lars.CannonFodder;
 import java.util.Random;
 
 public class Fodder {
+    //Todo potentially give different fodder hp so it needs more hits so be removed.
     private static Random rand = new Random();
 
     private Image fodderImage;
@@ -25,13 +26,13 @@ public class Fodder {
 
     }
 
-    private Rectangle2D getBoundary() {
+    private Rectangle2D getBoundaryOfImage() {
         return new Rectangle2D(getPositionX(), getPositionY(), getImageWidth(), getImageHeight());
     }
 
     //If fodder collides with cannonball.
     public boolean collisionDetection(Cannon cannonBall){
-        return getBoundary().intersects(cannonBall.getCannonBallX(), cannonBall.getCannonBallY(), cannonBall.getCannonBallWidth(), cannonBall.getCannonBallHeight());
+        return getBoundaryOfImage().intersects(cannonBall.getCannonBallX(), cannonBall.getCannonBallY(), cannonBall.getCannonBallWidth(), cannonBall.getCannonBallHeight());
     }
 
     private int randomXPosition(double windowWidth) {

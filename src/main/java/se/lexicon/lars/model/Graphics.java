@@ -38,26 +38,27 @@ public class Graphics extends Application {
         cannon.setCannonBallCircle(gc);
 
         fodder = new Fodder();
+        MainGame mainGame = new MainGame();
 
         new AnimationTimer() {
             public void handle(long now) {
                 gc.setFill(Color.BLACK);
                 gc.fillRect(0, 0, windowWidth, windowHeight);
-
                 cannon.renderCannon(gc, mainScene);
                 fodder.renderFodder(gc);
-                if(cannon.isCannonBall()) {
+                if (cannon.isCannonBall()) {
                     cannon.renderCannonBall(gc);
                 }
-                if(fodder.collisionDetection(cannon)) {
+                if (fodder.collisionDetection(cannon)) {
                     System.out.println("Cannonball hits the target.");
                     fodder = null;
                     fodder = new Fodder();
                 }
 
-                if(cannon.collisionDetection(fodder)) {
+                if (cannon.collisionDetection(fodder)) {
                     System.out.println("Fodder hits the cannon.");
                 }
+                mainGame.renderInformation(gc);
 
             }
         }.start();

@@ -19,17 +19,9 @@ public class GameRound {
         return new Cannon();
     }
 
-    //Set the boundary of cannonball.
-    private Rectangle2D getBoundaryOfCannonBall(Cannon cannonBall) {
-        return new Rectangle2D(cannonBall.getCannonBallX(), cannonBall.getCannonBallY(), cannonBall.getCannonBallWidth(), cannonBall.getCannonBallHeight());
-    }
-    //If cannonball collides with fodder.
-    public boolean collisionWithCannonBall(Cannon cannonBall, Fodder fodder) {
-        return getBoundaryOfCannonBall(cannonBall).intersects(fodder.getPositionX(), fodder.getPositionY(), fodder.getImageWidth(), fodder.getImageHeight());
-    }
-
-    public boolean fodderBoundary(Fodder fodder, Cannon cannon) {
-        return fodder.getPositionY() >= (CannonFodder.windowHeight - cannon.getImageHeight() - 50);
+    //Check if object1 collides with object2
+    public boolean collisionDetection(Object object1, double x, double y, double width, double height, Object object2, double x2, double y2, double width2, double height2) {
+        return new Rectangle2D(x, y, width, height).intersects(x2, y2, width2, height2);
     }
 
     public int getRoundScore() {
