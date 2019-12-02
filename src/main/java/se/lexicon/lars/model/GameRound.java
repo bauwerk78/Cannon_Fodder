@@ -18,11 +18,14 @@ public class GameRound {
     public Cannon createCannon() {
         return new Cannon();
     }
-
     //Check if object1 collides with object2
-    public boolean collisionDetection(Object object1, double x, double y, double width, double height, Object object2, double x2, double y2, double width2, double height2) {
+    public boolean collisionDetection(double x, double y, double width, double height, double x2, double y2, double width2, double height2) {
         return new Rectangle2D(x, y, width, height).intersects(x2, y2, width2, height2);
     }
+/*    //Check if object1 collides with object2
+    public boolean collisionDetection(Object object1, double x, double y, double width, double height, Object object2, double x2, double y2, double width2, double height2) {
+        return new Rectangle2D(x, y, width, height).intersects(x2, y2, width2, height2);
+    }*/
 
     public int getRoundScore() {
         return roundScore;
