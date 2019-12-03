@@ -26,13 +26,20 @@ public class Fodder {
 
     }
 
-    private Rectangle2D getBoundaryOfImage() {
+    public Fodder(double speed) {
+        setFodderImage();
+        setPositionX(randomXPosition(CannonFodder.windowWidth));
+        setPositionY(0 - getImageHeight() * 2);
+        setFodderSpeed(speed);
+    }
+
+    private Rectangle2D getBoundaryOfFodder() {
         return new Rectangle2D(getPositionX(), getPositionY(), getImageWidth(), getImageHeight());
     }
 
     //If fodder collides with cannonball.
     public boolean collisionDetection(Cannon cannonBall){
-        return getBoundaryOfImage().intersects(cannonBall.getCannonBallX(), cannonBall.getCannonBallY(), cannonBall.getCannonBallWidth(), cannonBall.getCannonBallHeight());
+        return getBoundaryOfFodder().intersects(cannonBall.getCannonBallX(), cannonBall.getCannonBallY(), cannonBall.getCannonBallWidth(), cannonBall.getCannonBallHeight());
     }
 
     private int randomXPosition(double windowWidth) {

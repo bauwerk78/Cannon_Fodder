@@ -36,27 +36,30 @@ public class Cannon {
 
     public Cannon() {
         setCannonImage();
-        //setCannonBall();
         setPositionX((windowWidth / 2));
         setPositionY(windowHeight - imageHeight - 50);
         setCannonSpeed(5);
 
     }
 
-    public Cannon(double positionX, double positionY, double cannonSpeed) {
+    public Cannon(double cannonSpeed) {
         setCannonImage();
-        this.positionX = positionX;
-        this.positionY = positionY;
-        this.cannonSpeed = cannonSpeed;
+        setPositionX((windowWidth / 2));
+        setPositionY(windowHeight - imageHeight - 50);
+        setCannonSpeed(cannonSpeed);
 
     }
 
-    private Rectangle2D getBoundary() {
+    public Rectangle2D getBoundaryOfCannon() {
         return new Rectangle2D(getPositionX(), getPositionY(), getImageWidth(), getImageHeight());
+    }
+
+    public Rectangle2D getBoundaryOfCannonBall() {
+        return new Rectangle2D(getCannonBallX(), getCannonBallY(), getCannonBallWidth(), getCannonBallHeight());
     }
     //If cannon collides with fodder.
     public boolean collisionDetection(Fodder fodder) {
-        return getBoundary().intersects(fodder.getPositionX(), fodder.getPositionY(), fodder.getImageWidth(), fodder.getImageHeight());
+        return getBoundaryOfCannon().intersects(fodder.getPositionX(), fodder.getPositionY(), fodder.getImageWidth(), fodder.getImageHeight());
     }
 
 

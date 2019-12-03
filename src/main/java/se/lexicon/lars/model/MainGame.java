@@ -12,9 +12,9 @@ public class MainGame extends GameRound {
     private int level;
 
 
+    public boolean renderGame() {
 
-    public void level1() {
-
+        return true;
     }
 
     public void renderInformation(GraphicsContext gc) {
@@ -25,12 +25,12 @@ public class MainGame extends GameRound {
         gc.fillText(gameScore, 10, 36);
         String fps = ("Fps: ");
     }
-    public boolean game() {
+    public boolean game(boolean state) {
 
-        return true;
+        return state;
     }
 
-    public void setGame() {
+    public void setGame(int currentLevel) {
 
     }
 
