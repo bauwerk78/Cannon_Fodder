@@ -2,7 +2,6 @@ package se.lexicon.lars.model;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -16,6 +15,8 @@ import java.util.ArrayList;
 
 
 public class Cannon {
+
+    private static int cannon = 0;
 
     private Image cannonImage;
     private Circle circle;
@@ -34,11 +35,13 @@ public class Cannon {
     private double cannonBallWidth;
     private double cannonBallHeight;
 
+
     public Cannon() {
         setCannonImage();
         setPositionX((windowWidth / 2));
         setPositionY(windowHeight - imageHeight - 50);
         setCannonSpeed(5);
+        cannon++;
 
     }
 
@@ -47,6 +50,7 @@ public class Cannon {
         setPositionX((windowWidth / 2));
         setPositionY(windowHeight - imageHeight - 50);
         setCannonSpeed(cannonSpeed);
+        cannon++;
 
     }
 

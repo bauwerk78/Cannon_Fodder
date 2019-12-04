@@ -1,39 +1,50 @@
 package se.lexicon.lars.model;
 
 import javafx.geometry.Rectangle2D;
-import se.lexicon.lars.CannonFodder;
+
+import java.util.ArrayList;
 
 public class GameRound {
-    private static int level = 1;
 
+    private int level = 1;
     private Cannon cannon;
-    private Fodder[] fodder;
+    private ArrayList<Fodder> fodderList = new ArrayList<>();
     private int roundScore;
+    private int amountOfFodder = level * 5;
     private int fodderSpeed = 1;
+    private boolean roundWon = false;
 
     public GameRound() {
-        initRound(level);
+        initRound();
     }
 
-    public Fodder[] generateFodder(int amountOfFodder) {
-        Fodder[] fodder = new Fodder[amountOfFodder];
-        for (int i = 0; i < fodder.length; i++) {
-            fodder[i] = new Fodder(fodderSpeed);
+    public ArrayList<Fodder> generateFodder() {
+        for (int i = 0; i < amountOfFodder; i++) {
+            fodderList.add(new Fodder());
+            fodderList.get(i).setFodderSpeed(level);
         }
-        return fodder;
+        if(fodderList != null) {
+            return fodderList;
+        }
+        return null;
     }
 
     public Cannon createCannon() {
         return new Cannon();
     }
 
-    public void initRound(int level) {
+    public void initRound() {
         cannon = createCannon();
-        fodder = generateFodder(10);
-        if (level > 1) {
-            fodderSpeed++;
-        }
+        fodderList = generateFodder();
+        fodderSpeed = level;
+    }
 
+    public void resetRound() {
+        cannon = null;
+        fodderList = null;
+        if(isRoundWon()) {
+            level++;
+        }
     }
 
     public void gameRound() {
@@ -61,5 +72,13 @@ public class GameRound {
 
     public void setRoundScore(int roundScore) {
         this.roundScore = roundScore;
+    }
+
+    public boolean isRoundWon() {
+        return roundWon;
+    }
+
+    public void setRoundWon(boolean roundWon) {
+        this.roundWon = roundWon;
     }
 }

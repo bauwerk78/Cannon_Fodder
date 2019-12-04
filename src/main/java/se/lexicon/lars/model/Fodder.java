@@ -10,6 +10,7 @@ import java.util.Random;
 public class Fodder {
     //Todo potentially give different fodder hp so it needs more hits so be removed.
     private static Random rand = new Random();
+    private static int fodderId = 0;
 
     private Image fodderImage;
     private double positionX;
@@ -22,7 +23,7 @@ public class Fodder {
         setFodderImage();
         setPositionX(randomXPosition(CannonFodder.windowWidth));
         setPositionY(0 - getImageHeight() * 2);
-        setFodderSpeed(1);
+        fodderId++;
 
     }
 
@@ -31,6 +32,7 @@ public class Fodder {
         setPositionX(randomXPosition(CannonFodder.windowWidth));
         setPositionY(0 - getImageHeight() * 2);
         setFodderSpeed(speed);
+        fodderId++;
     }
 
     private Rectangle2D getBoundaryOfFodder() {
