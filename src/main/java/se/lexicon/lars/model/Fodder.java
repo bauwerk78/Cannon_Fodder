@@ -8,9 +8,10 @@ import se.lexicon.lars.CannonFodder;
 import java.util.Random;
 
 public class Fodder {
+
+    private static int fodderId = 0;
     //Todo potentially give different fodder hp so it needs more hits so be removed.
     private static Random rand = new Random();
-    private static int fodderId = 0;
 
     private Image fodderImage;
     private double positionX;
