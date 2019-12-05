@@ -7,10 +7,6 @@ public class MainGame extends GameRound {
     public static int level;
 
 
-
-
-
-
     public boolean renderGame() {
 
         return true;
@@ -26,16 +22,9 @@ public class MainGame extends GameRound {
         return state;
     }
 
-    @Override
-    public int getLevel() {
-        return level;
-    }
+   public void startGame() {
 
-    @Override
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
+   }
     public int getTotalGameScore() {
         return totalGameScore;
     }

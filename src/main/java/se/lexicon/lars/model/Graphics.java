@@ -13,7 +13,7 @@ public class Graphics extends Application {
 
     public static final int windowWidth = 800;
     public static final int windowHeight = 600;
-    private long startNanoTime = System.nanoTime();
+    //private long startNanoTime = System.nanoTime();
     private Fodder fodder;
     private Cannon cannon;
 
@@ -33,37 +33,11 @@ public class Graphics extends Application {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-
-        /*cannon = new Cannon();
-        cannon.setCannonBallCircle(gc);
-
-        fodder = new Fodder(1);*/
-        MainGame mainGame = new MainGame();
+        //MainGame mainGame = new MainGame();
         GameRound gameRound = new GameRound(1);
         new AnimationTimer() {
-            public void handle(long now) {
-
+            public void handle(long currentNanoTime) {
                 gameRound.renderGameRound(gc, mainScene);
-
-
-                /* gc.setFill(Color.BLACK);
-                gc.fillRect(0, 0, windowWidth, windowHeight);
-                cannon.renderCannon(gc, mainScene);
-                fodder.renderFodder(gc);
-                if (cannon.isCannonBall()) {
-                    cannon.renderCannonBall(gc);
-                }
-                if (fodder.collisionDetection(cannon)) {
-                    System.out.println("Cannonball hits the target.");
-                    fodder = null;
-                    fodder = new Fodder();
-                }
-
-                if (cannon.collisionDetection(fodder)) {
-                    System.out.println("Fodder hits the cannon.");
-                }
-                mainGame.renderInformation(gc);*/
-
             }
         }.start();
 

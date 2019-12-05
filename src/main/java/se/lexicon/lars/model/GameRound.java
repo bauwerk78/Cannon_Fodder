@@ -24,7 +24,7 @@ public class GameRound {
     private int roundScore;
     private int amountOfFodder;
     private int fodderSpeed;
-    private boolean roundWon = false;
+    private boolean roundStillGoing = true;
 
     public GameRound() {
     }
@@ -35,18 +35,11 @@ public class GameRound {
 
     private void initRound(int level) {
         setLevel(level);
-        setAmountOfFodder(level);
+        setAmountOfFodder(level * 5);
+        //setAmountOfFodder(1);
         setFodderSpeed(level);
         cannon = createCannon();
         fodderList = generateFodder();
-    }
-
-    private void resetRound() {
-        cannon = null;
-        fodderList = null;
-        if (isRoundWon()) {
-            level++;
-        }
     }
 
     private ArrayList<Fodder> generateFodder() {
@@ -63,38 +56,62 @@ public class GameRound {
         return new Cannon();
     }
 
-
     public void renderGameRound(GraphicsContext gc, Scene scene) {
-        gc.setFill(Color.BLACK);
-        gc.fillRect(0, 0, windowWidth, windowHeight);
-        cannon.renderCannon(gc, scene);
-        if (cannon.isCannonBall()) {
-            cannon.renderCannonBall(gc);
-        }
-        Iterator<Fodder> fodders = fodderList.iterator();
-        while (fodders.hasNext()) {
-            Fodder fodder = fodders.next();
-            fodder.renderFodder(gc);
-            if (collisionDetection(fodder.getBoundaryOfFodder(), cannon.getBoundaryOfCannonBall())) {
-                fodders.remove();
-                cannon.setCannonBall(false);
-                setRoundScore(++roundScore);
-                totalGameScore++;
+        if(roundStillGoing) {
+            gc.setFill(Color.BLACK);
+            gc.fillRect(0, 0, windowWidth, windowHeight);
+            cannon.renderCannon(gc, scene);
+            if (cannon.isCannonBall()) {
+                cannon.renderCannonBall(gc);
             }
-        }
-        renderInformation(gc);
+            Iterator<Fodder> fodders = fodderList.iterator();
+            while (fodders.hasNext()) {
+                Fodder fodder = fodders.next();
+                fodder.renderFodder(gc);
+                if (collisionDetection(fodder.getBoundaryOfFodder(), cannon.getBoundaryOfCannonBall())) {
+                    fodders.remove();
+                    whenCollidedWithFodder();
+                }
 
+            }
+            for(Fodder fodder : fodderList) {
+                if(fodder.isPlayerKilled()) {
+                    System.out.println("Player is dead!");
+                    for(Fodder fod : fodderList) {
+                        fod.setFodderSpeed(0);
+                    }
+                }
+            }
+            renderInformation(gc);
+        }
+    }
+
+    public void whenCollidedWithFodder() {
+        setAmountOfFodder(getAmountOfFodder() - 1);
+        cannon.setCannonBall(false);
+        setRoundScore(getRoundScore() + 1);
+        totalGameScore = totalGameScore + 10;
     }
 
     public void renderInformation(GraphicsContext gc) {
-        Font theFont = Font.font("Verdana", FontWeight.BOLD, 20);
+        Font theFont = Font.font("Verdana", FontWeight.BOLD, 15);
         gc.setFont(theFont);
         gc.setFill(Color.WHITE);
         String totalScore = ("Total score: " + totalGameScore);
         gc.fillText(totalScore, 10, 25);
-        String roundScore = ("Round score: " + getRoundScore());
+        String roundScore = ("Kills this round: " + getRoundScore());
         gc.fillText(roundScore, 10, 56);
+        String fodderLeft = ("Fodder left to kill: " + getAmountOfFodder());
+        gc.fillText(fodderLeft, 10, 87);
         //String fps = ("Fps: ");
+    }
+
+    public void renderGameOver() {
+
+    }
+
+    public void renderGameRoundWon() {
+
     }
 
     public void gameRound() {
@@ -135,8 +152,8 @@ public class GameRound {
         return amountOfFodder;
     }
 
-    public void setAmountOfFodder(int level) {
-        this.amountOfFodder = level * 5;
+    public void setAmountOfFodder(int fodder) {
+        this.amountOfFodder = fodder;
     }
 
     public int getRoundScore() {
@@ -147,11 +164,11 @@ public class GameRound {
         this.roundScore = roundScore;
     }
 
-    public boolean isRoundWon() {
-        return roundWon;
+    public boolean isRoundStillGoing() {
+        return roundStillGoing;
     }
 
-    public void setRoundWon(boolean roundWon) {
-        this.roundWon = roundWon;
+    public void setRoundStillGoing(boolean roundStillGoing) {
+        this.roundStillGoing = roundStillGoing;
     }
 }

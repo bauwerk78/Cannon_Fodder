@@ -21,6 +21,7 @@ public class Fodder {
     private double fodderSpeed;
     private double imageWidth;
     private double imageHeight;
+    private boolean playerKilled = false;
 
     public Fodder() {
         setFodderImage();
@@ -65,11 +66,22 @@ public class Fodder {
 
     private void moveFodder() {
         setPositionY(getPositionY() + getFodderSpeed());
+        if(getPositionY() >= (windowHeight - 1) - (imageHeight * 2) - 48) {
+            setPlayerKilled(true);
+        }
     }
 
     public void renderFodder(GraphicsContext gc) {
         moveFodder();
         gc.drawImage(fodderImage, getPositionX(), getPositionY());
+    }
+
+    public boolean isPlayerKilled() {
+        return playerKilled;
+    }
+
+    public void setPlayerKilled(boolean playerKilled) {
+        this.playerKilled = playerKilled;
     }
 
     public static int getFodderId() {
