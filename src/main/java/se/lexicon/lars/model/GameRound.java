@@ -12,10 +12,12 @@ import java.util.Iterator;
 
 import static se.lexicon.lars.model.Graphics.windowHeight;
 import static se.lexicon.lars.model.Graphics.windowWidth;
+import static se.lexicon.lars.model.MainGame.totalGameScore;
+import static se.lexicon.lars.model.MainGame.level;
 
 public class GameRound {
 
-    private int level;
+    //private int level;
     private Cannon cannon;
     private ArrayList<Fodder> fodderList = new ArrayList<>();
     private Fodder fodder;
@@ -65,29 +67,33 @@ public class GameRound {
     public void renderGameRound(GraphicsContext gc, Scene scene) {
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, windowWidth, windowHeight);
-        //TODO render fodder, broken game atm.
         cannon.renderCannon(gc, scene);
         if (cannon.isCannonBall()) {
             cannon.renderCannonBall(gc);
         }
         Iterator<Fodder> fodders = fodderList.iterator();
-        while(fodders.hasNext()) {
+        while (fodders.hasNext()) {
             Fodder fodder = fodders.next();
             fodder.renderFodder(gc);
-            if(collisionDetection(fodder.getBoundaryOfFodder(), cannon.getBoundaryOfCannonBall())){
-                fodderList.remove(fodder);
+            if (collisionDetection(fodder.getBoundaryOfFodder(), cannon.getBoundaryOfCannonBall())) {
+                fodders.remove();
+                cannon.setCannonBall(false);
+                setRoundScore(++roundScore);
+                totalGameScore++;
             }
-
         }
+        renderInformation(gc);
+
     }
 
     public void renderInformation(GraphicsContext gc) {
         Font theFont = Font.font("Verdana", FontWeight.BOLD, 20);
         gc.setFont(theFont);
         gc.setFill(Color.WHITE);
-        //String totalScore = ("Total score: " + getGameScore());
-        //gc.fillText(totalScore, 10, 36);
-        //String roundScore = ("Round score: " + getRoundScore();
+        String totalScore = ("Total score: " + totalGameScore);
+        gc.fillText(totalScore, 10, 25);
+        String roundScore = ("Round score: " + getRoundScore());
+        gc.fillText(roundScore, 10, 56);
         //String fps = ("Fps: ");
     }
 
@@ -114,7 +120,7 @@ public class GameRound {
     }
 
     public void setLevel(int level) {
-        this.level = level;
+        MainGame.level = level;
     }
 
     public int getFodderSpeed() {

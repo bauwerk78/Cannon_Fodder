@@ -9,9 +9,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import se.lexicon.lars.CannonFodder;
+import static se.lexicon.lars.model.Graphics.windowHeight;
+import static se.lexicon.lars.model.Graphics.windowWidth;
 
 import java.util.ArrayList;
-
 
 
 public class Cannon {
@@ -26,8 +27,8 @@ public class Cannon {
     private double imageWidth;
     private double imageHeight;
     private double cannonSpeed;
-    private double windowWidth = CannonFodder.windowWidth;
-    private double windowHeight = CannonFodder.windowHeight;
+    private double windowWidth = Graphics.windowWidth;
+    private double windowHeight = Graphics.windowHeight;
     private double cannonBallX;
     private double cannonBallY;
     private double cannonBallSpeed;
@@ -48,10 +49,9 @@ public class Cannon {
     public Cannon(double cannonSpeed) {
         setCannonImage();
         setPositionX((windowWidth / 2));
-        setPositionY(windowHeight - imageHeight - 50);
+        setPositionY((windowHeight - 1) - imageHeight - 49);
         setCannonSpeed(cannonSpeed);
         cannon++;
-
     }
 
     public Rectangle2D getBoundaryOfCannon() {
@@ -61,6 +61,7 @@ public class Cannon {
     public Rectangle2D getBoundaryOfCannonBall() {
         return new Rectangle2D(getCannonBallX(), getCannonBallY(), getCannonBallWidth(), getCannonBallHeight());
     }
+
     //If cannon collides with fodder.
     public boolean collisionDetection(Fodder fodder) {
         return getBoundaryOfCannon().intersects(fodder.getPositionX(), fodder.getPositionY(), fodder.getImageWidth(), fodder.getImageHeight());
@@ -103,7 +104,7 @@ public class Cannon {
                 positionX = positionX - cannonSpeed;
             }
         }
-        if(input.contains("SPACE") && !isCannonBall()) {
+        if (input.contains("SPACE") && !isCannonBall()) {
             setCannonBallCircle(gc);
             System.out.println("Firing on target!");
             setCannonBall(true);
@@ -112,7 +113,7 @@ public class Cannon {
     }
 
     private void moveCannonBall() {
-        if(getCannonBallY() < 0) {
+        if (getCannonBallY() < 0) {
             setCannonBall(false);
         } else {
             setCannonBallY(getCannonBallY() - getCannonBallSpeed());
@@ -151,7 +152,6 @@ public class Cannon {
         circle.setRadius(20);
         circle.setFill(Color.RED);*/
     }
-
 
 
     public double getCannonSpeed() {

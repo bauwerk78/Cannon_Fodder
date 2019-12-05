@@ -4,6 +4,8 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import se.lexicon.lars.CannonFodder;
+import static se.lexicon.lars.model.Graphics.windowHeight;
+import static se.lexicon.lars.model.Graphics.windowWidth;
 
 import java.util.Random;
 
@@ -22,8 +24,8 @@ public class Fodder {
 
     public Fodder() {
         setFodderImage();
-        setPositionX(randomXPosition(CannonFodder.windowWidth));
-        setPositionY(0 - getImageHeight() * 2);
+        setPositionX(randomXPosition());
+        setPositionY(-randomYPosition());
         setFodderSpeed(1);
         fodderId++;
 
@@ -31,8 +33,8 @@ public class Fodder {
 
     public Fodder(double speed) {
         setFodderImage();
-        setPositionX(randomXPosition(CannonFodder.windowWidth));
-        setPositionY(0 - getImageHeight() * 2);
+        setPositionX(randomXPosition());
+        setPositionY(-randomYPosition());
         setFodderSpeed(speed);
         fodderId++;
     }
@@ -46,9 +48,13 @@ public class Fodder {
         return getBoundaryOfFodder().intersects(cannonBall.getCannonBallX(), cannonBall.getCannonBallY(), cannonBall.getCannonBallWidth(), cannonBall.getCannonBallHeight());
     }
 
-    private int randomXPosition(double windowWidth) {
+    private int randomXPosition() {
         int windowMax = ((int) windowWidth - (int) imageWidth) - 1;
         return rand.nextInt(windowMax);
+    }
+
+    private int randomYPosition() {
+        return rand.nextInt(700) + 50;
     }
 
     private void setFodderImage() {
