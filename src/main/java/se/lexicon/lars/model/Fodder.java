@@ -24,6 +24,7 @@ public class Fodder {
         setFodderImage();
         setPositionX(randomXPosition(CannonFodder.windowWidth));
         setPositionY(0 - getImageHeight() * 2);
+        setFodderSpeed(1);
         fodderId++;
 
     }
@@ -36,7 +37,7 @@ public class Fodder {
         fodderId++;
     }
 
-    private Rectangle2D getBoundaryOfFodder() {
+    public Rectangle2D getBoundaryOfFodder() {
         return new Rectangle2D(getPositionX(), getPositionY(), getImageWidth(), getImageHeight());
     }
 
@@ -63,6 +64,14 @@ public class Fodder {
     public void renderFodder(GraphicsContext gc) {
         moveFodder();
         gc.drawImage(fodderImage, getPositionX(), getPositionY());
+    }
+
+    public static int getFodderId() {
+        return fodderId;
+    }
+
+    public static void setFodderId(int fodderId) {
+        Fodder.fodderId = fodderId;
     }
 
     public double getFodderSpeed() {

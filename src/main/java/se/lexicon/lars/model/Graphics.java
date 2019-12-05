@@ -34,15 +34,19 @@ public class Graphics extends Application {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
 
-        cannon = new Cannon();
+        /*cannon = new Cannon();
         cannon.setCannonBallCircle(gc);
 
-        fodder = new Fodder();
+        fodder = new Fodder(1);*/
         MainGame mainGame = new MainGame();
-
+        GameRound gameRound = new GameRound(1);
         new AnimationTimer() {
             public void handle(long now) {
-                gc.setFill(Color.BLACK);
+
+                gameRound.renderGameRound(gc, mainScene);
+
+
+                /* gc.setFill(Color.BLACK);
                 gc.fillRect(0, 0, windowWidth, windowHeight);
                 cannon.renderCannon(gc, mainScene);
                 fodder.renderFodder(gc);
@@ -58,7 +62,7 @@ public class Graphics extends Application {
                 if (cannon.collisionDetection(fodder)) {
                     System.out.println("Fodder hits the cannon.");
                 }
-                mainGame.renderInformation(gc);
+                mainGame.renderInformation(gc);*/
 
             }
         }.start();

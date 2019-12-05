@@ -1,50 +1,94 @@
 package se.lexicon.lars.model;
 
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Scene;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+
+import static se.lexicon.lars.model.Graphics.windowHeight;
+import static se.lexicon.lars.model.Graphics.windowWidth;
 
 public class GameRound {
 
-    private int level = 1;
+    private int level;
     private Cannon cannon;
     private ArrayList<Fodder> fodderList = new ArrayList<>();
+    private Fodder fodder;
     private int roundScore;
-    private int amountOfFodder = level * 5;
-    private int fodderSpeed = 1;
+    private int amountOfFodder;
+    private int fodderSpeed;
     private boolean roundWon = false;
 
     public GameRound() {
-        initRound();
     }
 
-    public ArrayList<Fodder> generateFodder() {
+    public GameRound(int level) {
+        initRound(level);
+    }
+
+    private void initRound(int level) {
+        setLevel(level);
+        setAmountOfFodder(level);
+        setFodderSpeed(level);
+        cannon = createCannon();
+        fodderList = generateFodder();
+    }
+
+    private void resetRound() {
+        cannon = null;
+        fodderList = null;
+        if (isRoundWon()) {
+            level++;
+        }
+    }
+
+    private ArrayList<Fodder> generateFodder() {
         for (int i = 0; i < amountOfFodder; i++) {
-            fodderList.add(new Fodder());
-            fodderList.get(i).setFodderSpeed(level);
+            fodderList.add(new Fodder(level));
         }
-        if(fodderList != null) {
-            return fodderList;
+        if (fodderList.isEmpty()) {
+            return null;
         }
-        return null;
+        return fodderList;
     }
 
-    public Cannon createCannon() {
+    private Cannon createCannon() {
         return new Cannon();
     }
 
-    public void initRound() {
-        cannon = createCannon();
-        fodderList = generateFodder();
-        fodderSpeed = level;
+
+    public void renderGameRound(GraphicsContext gc, Scene scene) {
+        gc.setFill(Color.BLACK);
+        gc.fillRect(0, 0, windowWidth, windowHeight);
+        //TODO render fodder, broken game atm.
+        cannon.renderCannon(gc, scene);
+        if (cannon.isCannonBall()) {
+            cannon.renderCannonBall(gc);
+        }
+        Iterator<Fodder> fodders = fodderList.iterator();
+        while(fodders.hasNext()) {
+            Fodder fodder = fodders.next();
+            fodder.renderFodder(gc);
+            if(collisionDetection(fodder.getBoundaryOfFodder(), cannon.getBoundaryOfCannonBall())){
+                fodderList.remove(fodder);
+            }
+
+        }
     }
 
-    public void resetRound() {
-        cannon = null;
-        fodderList = null;
-        if(isRoundWon()) {
-            level++;
-        }
+    public void renderInformation(GraphicsContext gc) {
+        Font theFont = Font.font("Verdana", FontWeight.BOLD, 20);
+        gc.setFont(theFont);
+        gc.setFill(Color.WHITE);
+        //String totalScore = ("Total score: " + getGameScore());
+        //gc.fillText(totalScore, 10, 36);
+        //String roundScore = ("Round score: " + getRoundScore();
+        //String fps = ("Fps: ");
     }
 
     public void gameRound() {
@@ -65,6 +109,29 @@ public class GameRound {
         return object1.intersects(object2);
     }
 
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public int getFodderSpeed() {
+        return fodderSpeed;
+    }
+
+    public void setFodderSpeed(int fodderSpeed) {
+        this.fodderSpeed = fodderSpeed;
+    }
+
+    public int getAmountOfFodder() {
+        return amountOfFodder;
+    }
+
+    public void setAmountOfFodder(int level) {
+        this.amountOfFodder = level * 5;
+    }
 
     public int getRoundScore() {
         return roundScore;
