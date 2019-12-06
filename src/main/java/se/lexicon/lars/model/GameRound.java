@@ -14,6 +14,7 @@ import static se.lexicon.lars.model.Graphics.windowHeight;
 import static se.lexicon.lars.model.Graphics.windowWidth;
 import static se.lexicon.lars.model.MainGame.totalGameScore;
 import static se.lexicon.lars.model.MainGame.level;
+import static se.lexicon.lars.model.Fodder.playerKilled;
 
 public class GameRound {
 
@@ -25,19 +26,25 @@ public class GameRound {
     private int amountOfFodder;
     private int fodderSpeed;
     private boolean roundStillGoing = true;
+    private boolean roundWon = false;
 
     public GameRound() {
     }
 
     public GameRound(int level) {
-        initRound(level);
+        initNewRound(level);
     }
 
-    private void initRound(int level) {
+    public void initNewRound(int level) {
+        setRoundStillGoing(true);
         setLevel(level);
         setAmountOfFodder(level * 5);
-        //setAmountOfFodder(1);
         setFodderSpeed(level);
+        setPlayerKilled(false);
+        if (cannon != null) {
+            cannon = null;
+            //fodderList = null;
+        }
         cannon = createCannon();
         fodderList = generateFodder();
     }
@@ -57,9 +64,10 @@ public class GameRound {
     }
 
     public void renderGameRound(GraphicsContext gc, Scene scene) {
-        if(roundStillGoing) {
+        if (roundStillGoing) {
             gc.setFill(Color.BLACK);
             gc.fillRect(0, 0, windowWidth, windowHeight);
+            renderRectangle(gc);
             cannon.renderCannon(gc, scene);
             if (cannon.isCannonBall()) {
                 cannon.renderCannonBall(gc);
@@ -74,14 +82,24 @@ public class GameRound {
                 }
 
             }
-            for(Fodder fodder : fodderList) {
-                if(fodder.isPlayerKilled()) {
-                    System.out.println("Player is dead!");
-                    for(Fodder fod : fodderList) {
+/*            for (Fodder fodder : fodderList) {
+                if (fodder.isPlayerKilled()) {
+                    //System.out.println("Player is dead!");
+                    for (Fodder fod : fodderList) {
                         fod.setFodderSpeed(0);
                     }
+
+                    break;
                 }
-            }
+            }*/
+
+           /* if (getAmountOfFodder() == 0) {
+                System.out.println("Round won.");
+                setRoundWon(true);
+                setLevel(getLevel() + 1);
+
+            }*/
+
             renderInformation(gc);
         }
     }
@@ -91,6 +109,22 @@ public class GameRound {
         cannon.setCannonBall(false);
         setRoundScore(getRoundScore() + 1);
         totalGameScore = totalGameScore + 10;
+    }
+
+    public void whenPlayerIsDead() {
+        cannon.setCannonBall(false);
+        setRoundStillGoing(false);
+        if (isPlayerKilled()) {
+            for (Fodder fod : fodderList) {
+                fod.setFodderSpeed(0);
+            }
+        }
+
+    }
+
+    public void renderRectangle(GraphicsContext gc) {
+        gc.setFill(Color.RED);
+        gc.fillRect(0, (windowHeight - 1) - (cannon.getImageHeight() * 2) - 48, windowWidth - 1, 5);
     }
 
     public void renderInformation(GraphicsContext gc) {
@@ -104,6 +138,14 @@ public class GameRound {
         String fodderLeft = ("Fodder left to kill: " + getAmountOfFodder());
         gc.fillText(fodderLeft, 10, 87);
         //String fps = ("Fps: ");
+    }
+
+    public boolean isPlayerKilled() {
+        return playerKilled;
+    }
+
+    public void setPlayerKilled(Boolean set) {
+        playerKilled = set;
     }
 
     public void renderGameOver() {
@@ -130,6 +172,14 @@ public class GameRound {
     //Check if object1 collides with object2
     public boolean collisionDetection(Rectangle2D object1, Rectangle2D object2) {
         return object1.intersects(object2);
+    }
+
+    public boolean isRoundWon() {
+        return roundWon;
+    }
+
+    public void setRoundWon(boolean roundWon) {
+        this.roundWon = roundWon;
     }
 
     public int getLevel() {

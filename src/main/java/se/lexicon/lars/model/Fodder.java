@@ -21,7 +21,7 @@ public class Fodder {
     private double fodderSpeed;
     private double imageWidth;
     private double imageHeight;
-    private boolean playerKilled = false;
+    public static boolean playerKilled = false;
 
     public Fodder() {
         setFodderImage();
@@ -66,7 +66,7 @@ public class Fodder {
 
     private void moveFodder() {
         setPositionY(getPositionY() + getFodderSpeed());
-        if(getPositionY() >= (windowHeight - 1) - (imageHeight * 2) - 48) {
+        if(getPositionY() >= (windowHeight - 1) - (imageHeight * 3) - 48) {
             setPlayerKilled(true);
         }
     }

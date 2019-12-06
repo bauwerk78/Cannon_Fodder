@@ -40,7 +40,7 @@ public class Cannon {
     public Cannon() {
         setCannonImage();
         setPositionX((windowWidth / 2));
-        setPositionY(windowHeight - imageHeight - 50);
+        setPositionY((windowHeight - 1) - imageHeight - 49);
         setCannonSpeed(5);
         cannon++;
 
