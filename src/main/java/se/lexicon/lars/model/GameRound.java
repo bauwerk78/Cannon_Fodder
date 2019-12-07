@@ -97,6 +97,7 @@ public class GameRound {
                 whenPlayerIsDead();
                 break;
             }
+
         }
         renderInformation(gc);
     }//End of render game round.
@@ -170,9 +171,14 @@ public class GameRound {
         return new Rectangle2D(x, y, width, height).intersects(new Rectangle2D(x2, y2, width2, height2));
     }
 
+    //Todo might have ruined something here? Certain objects is dissapearing without collision.
     //Check if object1 collides with object2
     public boolean collisionDetection(Rectangle2D object1, Rectangle2D object2) {
-        return object1.intersects(object2);
+        if(object1.intersects(object2)) {
+            object2 = null;
+            return true;
+        }
+        return false;
     }
 
     public int getLevel() {

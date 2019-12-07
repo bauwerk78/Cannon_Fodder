@@ -32,7 +32,7 @@ public class MainGame extends GameRound {
         resetCannon();
     }
 
-    public void newGameBanner(Group group, GraphicsContext gc, Scene scene, long currentNanoTime) {
+    public void newGameBanner(GraphicsContext gc, Scene scene) {
         image = new Image("file:Images/newgameimage2.png");
         scene.setOnKeyPressed(
                 new EventHandler<KeyEvent>() {
@@ -40,7 +40,6 @@ public class MainGame extends GameRound {
                     public void handle(KeyEvent event) {
                         if (event.getCode().toString().contains("ENTER")) {
                             initNewGame();
-                            //clearFodderList();
                             initNewRound(level);
                         }
                     }
@@ -59,7 +58,7 @@ public class MainGame extends GameRound {
         if (isPlayerKilled()) {
             System.out.println("Player is dead.");
             setPlayerKilled(false);
-            newGameBanner(group, gc, scene, currentNanoTime);
+            newGameBanner(gc, scene);
         }
         if (isRoundStillGoing() && !isPlayerKilled()) {
             //System.out.println("Round still going.");
@@ -73,6 +72,6 @@ public class MainGame extends GameRound {
     }
 
     public void setTotalGameScore(int totalGameScore) {
-        this.totalGameScore = totalGameScore;
+        MainGame.totalGameScore = totalGameScore;
     }
 }

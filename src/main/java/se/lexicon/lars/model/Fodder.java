@@ -10,7 +10,7 @@ import static se.lexicon.lars.model.Graphics.windowWidth;
 
 public class Fodder {
 
-    public static int  fodderId = 0;
+    public static int fodderId = 0;
     //Todo potentially give different fodder hp so it needs more hits so be removed.
     private static Random rand = new Random();
     //public static boolean playerKilled = false;
