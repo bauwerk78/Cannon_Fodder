@@ -7,21 +7,16 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import se.lexicon.lars.CannonFodder;
-import static se.lexicon.lars.model.Graphics.windowHeight;
-import static se.lexicon.lars.model.Graphics.windowWidth;
 
 import java.util.ArrayList;
 
 
 public class Cannon {
 
-    private static int cannon = 0;
+    private static int cannonId = 0;
 
     private Image cannonImage;
-    private Circle circle;
-    private ArrayList<String> input = new ArrayList<String>();
+    private ArrayList<String> input = new ArrayList<>();
     private double positionX;
     private double positionY;
     private double imageWidth;
@@ -42,7 +37,7 @@ public class Cannon {
         setPositionX((windowWidth / 2));
         setPositionY((windowHeight - 1) - imageHeight - 49);
         setCannonSpeed(5);
-        cannon++;
+        cannonId++;
 
     }
 
@@ -51,7 +46,7 @@ public class Cannon {
         setPositionX((windowWidth / 2));
         setPositionY((windowHeight - 1) - imageHeight - 49);
         setCannonSpeed(cannonSpeed);
-        cannon++;
+        cannonId++;
     }
 
     public Rectangle2D getBoundaryOfCannon() {
@@ -61,12 +56,6 @@ public class Cannon {
     public Rectangle2D getBoundaryOfCannonBall() {
         return new Rectangle2D(getCannonBallX(), getCannonBallY(), getCannonBallWidth(), getCannonBallHeight());
     }
-
-    //If cannon collides with fodder.
-    public boolean collisionDetection(Fodder fodder) {
-        return getBoundaryOfCannon().intersects(fodder.getPositionX(), fodder.getPositionY(), fodder.getImageWidth(), fodder.getImageHeight());
-    }
-
 
     private void getPlayerInput(Scene scene) {
         scene.setOnKeyPressed(

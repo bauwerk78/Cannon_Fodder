@@ -3,17 +3,17 @@ package se.lexicon.lars.model;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import se.lexicon.lars.CannonFodder;
-import static se.lexicon.lars.model.Graphics.windowHeight;
-import static se.lexicon.lars.model.Graphics.windowWidth;
 
 import java.util.Random;
+
+import static se.lexicon.lars.model.Graphics.windowWidth;
 
 public class Fodder {
 
     private static int fodderId = 0;
     //Todo potentially give different fodder hp so it needs more hits so be removed.
     private static Random rand = new Random();
+    //public static boolean playerKilled = false;
 
     private Image fodderImage;
     private double positionX;
@@ -21,13 +21,12 @@ public class Fodder {
     private double fodderSpeed;
     private double imageWidth;
     private double imageHeight;
-    public static boolean playerKilled = false;
 
     public Fodder() {
         setFodderImage();
         setPositionX(randomXPosition());
         setPositionY(-randomYPosition());
-        setFodderSpeed(1);
+        setFodderSpeed(100);
         fodderId++;
 
     }
@@ -42,11 +41,6 @@ public class Fodder {
 
     public Rectangle2D getBoundaryOfFodder() {
         return new Rectangle2D(getPositionX(), getPositionY(), getImageWidth(), getImageHeight());
-    }
-
-    //If fodder collides with cannonball.
-    public boolean collisionDetection(Cannon cannonBall){
-        return getBoundaryOfFodder().intersects(cannonBall.getCannonBallX(), cannonBall.getCannonBallY(), cannonBall.getCannonBallWidth(), cannonBall.getCannonBallHeight());
     }
 
     private int randomXPosition() {
@@ -65,10 +59,10 @@ public class Fodder {
     }
 
     private void moveFodder() {
-        setPositionY(getPositionY() + getFodderSpeed());
-        if(getPositionY() >= (windowHeight - 1) - (imageHeight * 3) - 48) {
-            setPlayerKilled(true);
-        }
+        double newPosition = getPositionY();
+        newPosition += getFodderSpeed() * GameRound.elapsedTime;
+        setPositionY(newPosition);
+        /*setPositionY(getPositionY() + getFodderSpeed());*/
     }
 
     public void renderFodder(GraphicsContext gc) {
@@ -76,27 +70,20 @@ public class Fodder {
         gc.drawImage(fodderImage, getPositionX(), getPositionY());
     }
 
-    public boolean isPlayerKilled() {
-        return playerKilled;
-    }
-
-    public void setPlayerKilled(boolean playerKilled) {
-        this.playerKilled = playerKilled;
-    }
-
     public static int getFodderId() {
         return fodderId;
-    }
-
-    public static void setFodderId(int fodderId) {
-        Fodder.fodderId = fodderId;
     }
 
     public double getFodderSpeed() {
         return fodderSpeed;
     }
 
+ /*   public void setFodderSpeed(double fodderSpeed) {
+        this.fodderSpeed = fodderSpeed;
+    }*/
+
     public void setFodderSpeed(double fodderSpeed) {
+
         this.fodderSpeed = fodderSpeed;
     }
 

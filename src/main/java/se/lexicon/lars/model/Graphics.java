@@ -12,7 +12,7 @@ public class Graphics extends Application {
 
     public static final int windowWidth = 800;
     public static final int windowHeight = 600;
-    //private long startNanoTime = System.nanoTime();
+    public static Long startNanoTime = System.nanoTime();
 
     @Override
     public void start(Stage primaryStage) {
@@ -30,14 +30,12 @@ public class Graphics extends Application {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        //MainGame mainGame = new MainGame();
-        GameRound gameRound = new GameRound(1);
         MainGame mainGame = new MainGame(1);
 
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
-                //gameRound.renderGameRound(gc, mainScene);
-                mainGame.renderGame(root, gc, mainScene);
+                mainGame.renderGame(root, gc, mainScene, currentNanoTime);
+
             }
         }.start();
 

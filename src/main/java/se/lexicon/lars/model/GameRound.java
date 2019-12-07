@@ -4,29 +4,30 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import static se.lexicon.lars.model.Graphics.windowHeight;
-import static se.lexicon.lars.model.Graphics.windowWidth;
+import static se.lexicon.lars.model.Graphics.*;
 import static se.lexicon.lars.model.MainGame.totalGameScore;
 import static se.lexicon.lars.model.MainGame.level;
-import static se.lexicon.lars.model.Fodder.playerKilled;
 
 public class GameRound {
 
-    //private int level;
-    private Cannon cannon;
+    public static double elapsedTime;
+
+    private Cannon cannon = new Cannon();
     private ArrayList<Fodder> fodderList = new ArrayList<>();
-    private Fodder fodder;
     private int roundScore;
     private int amountOfFodder;
-    private int fodderSpeed;
+    private double fodderSpeed;
     private boolean roundStillGoing = true;
-    private boolean roundWon = false;
+    private boolean playerKilled = false;
 
     public GameRound() {
     }
@@ -36,22 +37,18 @@ public class GameRound {
     }
 
     public void initNewRound(int level) {
-        setRoundStillGoing(true);
         setLevel(level);
-        setAmountOfFodder(level * 5);
-        setFodderSpeed(level);
-        setPlayerKilled(false);
-        if (cannon != null) {
-            cannon = null;
-            //fodderList = null;
-        }
-        cannon = createCannon();
+        setAmountOfFodder((level * 2) + 3);
+        setFodderSpeed((level * 5d) + 40d);
+        setRoundScore(0);
+        setRoundStillGoing(true);
         fodderList = generateFodder();
     }
 
     private ArrayList<Fodder> generateFodder() {
+        fodderList.clear();
         for (int i = 0; i < amountOfFodder; i++) {
-            fodderList.add(new Fodder(level));
+            fodderList.add(new Fodder(getFodderSpeed()));
         }
         if (fodderList.isEmpty()) {
             return null;
@@ -59,50 +56,48 @@ public class GameRound {
         return fodderList;
     }
 
-    private Cannon createCannon() {
+    protected Cannon createCannon() {
         return new Cannon();
     }
 
-    public void renderGameRound(GraphicsContext gc, Scene scene) {
-        if (roundStillGoing) {
-            gc.setFill(Color.BLACK);
-            gc.fillRect(0, 0, windowWidth, windowHeight);
-            renderRectangle(gc);
-            cannon.renderCannon(gc, scene);
-            if (cannon.isCannonBall()) {
-                cannon.renderCannonBall(gc);
-            }
+    protected void resetCannon() {
+        if (cannon != null) {
+            cannon = null;
+        }
+        cannon = new Cannon();
+    }
+
+    public void renderGameRound(GraphicsContext gc, Scene scene, long currentNanoTime) {
+        elapsedTime = (currentNanoTime - startNanoTime.doubleValue()) / 1_000_000_000d;
+        startNanoTime = currentNanoTime;
+        //System.out.println(elapsedTime);
+        //System.out.println(getFodderSpeed());
+        gc.setFill(Color.BLACK);
+        gc.fillRect(0, 0, windowWidth, windowHeight);
+        renderRedBorderRectangle(gc);
+        renderGradientBackgroundRectangles(gc, Color.BLACK, Color.DARKGREEN );
+        cannon.renderCannon(gc, scene);
+        if (cannon.isCannonBall()) {
+            cannon.renderCannonBall(gc);
+        }
+        if (amountOfFodder > 0 && !isPlayerKilled()) {
             Iterator<Fodder> fodders = fodderList.iterator();
             while (fodders.hasNext()) {
                 Fodder fodder = fodders.next();
                 fodder.renderFodder(gc);
+                //System.out.println(fodder.getPositionY());
                 if (collisionDetection(fodder.getBoundaryOfFodder(), cannon.getBoundaryOfCannonBall())) {
                     fodders.remove();
                     whenCollidedWithFodder();
                 }
-
-            }
-/*            for (Fodder fodder : fodderList) {
-                if (fodder.isPlayerKilled()) {
-                    //System.out.println("Player is dead!");
-                    for (Fodder fod : fodderList) {
-                        fod.setFodderSpeed(0);
-                    }
-
-                    break;
+                if (fodder.getPositionY() >= (windowHeight - 1) - (fodder.getImageHeight() * 3) - 48) {
+                    whenPlayerIsDead();
                 }
-            }*/
-
-           /* if (getAmountOfFodder() == 0) {
-                System.out.println("Round won.");
-                setRoundWon(true);
-                setLevel(getLevel() + 1);
-
-            }*/
-
-            renderInformation(gc);
+            }
         }
-    }
+        renderInformation(gc);
+
+    }//End of render game round.
 
     public void whenCollidedWithFodder() {
         setAmountOfFodder(getAmountOfFodder() - 1);
@@ -112,19 +107,28 @@ public class GameRound {
     }
 
     public void whenPlayerIsDead() {
+        setPlayerKilled(true);
         cannon.setCannonBall(false);
         setRoundStillGoing(false);
-        if (isPlayerKilled()) {
-            for (Fodder fod : fodderList) {
-                fod.setFodderSpeed(0);
-            }
+        for (Fodder fod : fodderList) {
+            fod.setFodderSpeed(0);
         }
-
     }
 
-    public void renderRectangle(GraphicsContext gc) {
+    public void renderRedBorderRectangle(GraphicsContext gc) {
         gc.setFill(Color.RED);
         gc.fillRect(0, (windowHeight - 1) - (cannon.getImageHeight() * 2) - 48, windowWidth - 1, 5);
+    }
+
+    public void renderGradientBackgroundRectangles(GraphicsContext gc, Color firstColor, Color secondColor) {
+        Stop[] stops = { new Stop(0, firstColor), new Stop(1, secondColor)};
+        LinearGradient lg = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, stops);
+        gc.setFill(lg);
+        gc.fillRect(0, (windowHeight - 1) - (cannon.getImageHeight() * 2) - 47, windowWidth, 99);
+        Stop[] stops2 = { new Stop(0, secondColor), new Stop(1, firstColor)};
+        LinearGradient lg2 = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, stops2);
+        gc.setFill(lg2);
+        gc.fillRect(0, (windowHeight - 1) - 49, windowWidth, 55);
     }
 
     public void renderInformation(GraphicsContext gc) {
@@ -137,8 +141,15 @@ public class GameRound {
         gc.fillText(roundScore, 10, 56);
         String fodderLeft = ("Fodder left to kill: " + getAmountOfFodder());
         gc.fillText(fodderLeft, 10, 87);
+        String level = ("Level: " + getLevel());
+        gc.fillText(level, 10, 118);
+        /*String fodderSpeed = ("Fodderspeed: " + fodderList.get(0).getFodderSpeed());
+        gc.fillText(fodderSpeed, 10, 120);
+        String fodderYPosition = ("FodderYPosition: " + fodderList.get(0).getPositionY());
+        gc.fillText(fodderYPosition, 10, 150);*/
         //String fps = ("Fps: ");
     }
+
 
     public boolean isPlayerKilled() {
         return playerKilled;
@@ -146,22 +157,6 @@ public class GameRound {
 
     public void setPlayerKilled(Boolean set) {
         playerKilled = set;
-    }
-
-    public void renderGameOver() {
-
-    }
-
-    public void renderGameRoundWon() {
-
-    }
-
-    public void gameRound() {
-
-    }
-
-    public void endOfRound() {
-
     }
 
     //Check if these areas collides.
@@ -174,14 +169,6 @@ public class GameRound {
         return object1.intersects(object2);
     }
 
-    public boolean isRoundWon() {
-        return roundWon;
-    }
-
-    public void setRoundWon(boolean roundWon) {
-        this.roundWon = roundWon;
-    }
-
     public int getLevel() {
         return level;
     }
@@ -190,11 +177,11 @@ public class GameRound {
         MainGame.level = level;
     }
 
-    public int getFodderSpeed() {
+    public double getFodderSpeed() {
         return fodderSpeed;
     }
 
-    public void setFodderSpeed(int fodderSpeed) {
+    public void setFodderSpeed(double fodderSpeed) {
         this.fodderSpeed = fodderSpeed;
     }
 
