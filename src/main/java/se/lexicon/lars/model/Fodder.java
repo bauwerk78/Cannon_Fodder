@@ -10,7 +10,7 @@ import static se.lexicon.lars.model.Graphics.windowWidth;
 
 public class Fodder {
 
-    private static int fodderId = 0;
+    public static int  fodderId = 0;
     //Todo potentially give different fodder hp so it needs more hits so be removed.
     private static Random rand = new Random();
     //public static boolean playerKilled = false;
@@ -21,13 +21,14 @@ public class Fodder {
     private double fodderSpeed;
     private double imageWidth;
     private double imageHeight;
+    private int thisFodderId;
 
     public Fodder() {
         setFodderImage();
         setPositionX(randomXPosition());
         setPositionY(-randomYPosition());
         setFodderSpeed(100);
-        fodderId++;
+        setThisFodderId(++fodderId);
 
     }
 
@@ -36,7 +37,8 @@ public class Fodder {
         setPositionX(randomXPosition());
         setPositionY(-randomYPosition());
         setFodderSpeed(speed);
-        fodderId++;
+        setThisFodderId(++fodderId);
+
     }
 
     public Rectangle2D getBoundaryOfFodder() {
@@ -44,8 +46,7 @@ public class Fodder {
     }
 
     private int randomXPosition() {
-        int windowMax = ((int) windowWidth - (int) imageWidth) - 1;
-        return rand.nextInt(windowMax);
+        return rand.nextInt(((int) windowWidth - (int) imageWidth));
     }
 
     private int randomYPosition() {
@@ -70,17 +71,21 @@ public class Fodder {
         gc.drawImage(fodderImage, getPositionX(), getPositionY());
     }
 
-    public static int getFodderId() {
+    public int getThisFodderId() {
+        return thisFodderId;
+    }
+
+    public void setThisFodderId(int thisFodderId) {
+        this.thisFodderId = thisFodderId;
+    }
+
+    public int getFodderId() {
         return fodderId;
     }
 
     public double getFodderSpeed() {
         return fodderSpeed;
     }
-
- /*   public void setFodderSpeed(double fodderSpeed) {
-        this.fodderSpeed = fodderSpeed;
-    }*/
 
     public void setFodderSpeed(double fodderSpeed) {
 

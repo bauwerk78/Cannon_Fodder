@@ -134,12 +134,6 @@ public class Cannon {
         setCannonBallSpeed(3);
         gc.setFill(Color.RED);
         gc.fillOval(getCannonBallX(), getCannonBallY(), getCannonBallWidth(), getCannonBallHeight());
-
-        //group.getChildren().add(circle);
-/*        circle.setCenterX(positionX);
-        circle.setCenterY(positionY);
-        circle.setRadius(20);
-        circle.setFill(Color.RED);*/
     }
 
 

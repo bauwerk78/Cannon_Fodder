@@ -25,8 +25,10 @@ public class MainGame extends GameRound {
     }
 
     public void initNewGame() {
+
         setTotalGameScore(0);
         setLevel(1);
+        Fodder.fodderId = 0;
         resetCannon();
     }
 
@@ -38,11 +40,13 @@ public class MainGame extends GameRound {
                     public void handle(KeyEvent event) {
                         if (event.getCode().toString().contains("ENTER")) {
                             initNewGame();
+                            //clearFodderList();
                             initNewRound(level);
                         }
                     }
                 });
         gc.drawImage(image, (Graphics.windowWidth / 2d) - 150, (Graphics.windowHeight / 2d) - 50);
+        System.out.println("newGameBanner triggered.");
     }
 
     public void renderGame(Group group, GraphicsContext gc, Scene scene, long currentNanoTime) {
@@ -57,9 +61,11 @@ public class MainGame extends GameRound {
             setPlayerKilled(false);
             newGameBanner(group, gc, scene, currentNanoTime);
         }
-        if (isRoundStillGoing()) {
+        if (isRoundStillGoing() && !isPlayerKilled()) {
+            //System.out.println("Round still going.");
             renderGameRound(gc, scene, currentNanoTime);
         }
+        gameTimer(currentNanoTime);
     }
 
     public int getTotalGameScore() {

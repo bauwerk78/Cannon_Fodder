@@ -41,6 +41,7 @@ public class GameRound {
         setAmountOfFodder((level * 2) + 3);
         setFodderSpeed((level * 5d) + 40d);
         setRoundScore(0);
+        Fodder.fodderId = 0;
         setRoundStillGoing(true);
         fodderList = generateFodder();
     }
@@ -67,36 +68,37 @@ public class GameRound {
         cannon = new Cannon();
     }
 
-    public void renderGameRound(GraphicsContext gc, Scene scene, long currentNanoTime) {
+    public void gameTimer(long currentNanoTime) {
         elapsedTime = (currentNanoTime - startNanoTime.doubleValue()) / 1_000_000_000d;
         startNanoTime = currentNanoTime;
+    }
+
+    public void renderGameRound(GraphicsContext gc, Scene scene, long currentNanoTime) {
         //System.out.println(elapsedTime);
         //System.out.println(getFodderSpeed());
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, windowWidth, windowHeight);
         renderRedBorderRectangle(gc);
-        renderGradientBackgroundRectangles(gc, Color.BLACK, Color.DARKGREEN );
+        renderGradientBackgroundRectangles(gc, Color.BLACK, Color.DARKGREEN);
         cannon.renderCannon(gc, scene);
         if (cannon.isCannonBall()) {
             cannon.renderCannonBall(gc);
         }
-        if (amountOfFodder > 0 && !isPlayerKilled()) {
-            Iterator<Fodder> fodders = fodderList.iterator();
-            while (fodders.hasNext()) {
-                Fodder fodder = fodders.next();
-                fodder.renderFodder(gc);
-                //System.out.println(fodder.getPositionY());
-                if (collisionDetection(fodder.getBoundaryOfFodder(), cannon.getBoundaryOfCannonBall())) {
-                    fodders.remove();
-                    whenCollidedWithFodder();
-                }
-                if (fodder.getPositionY() >= (windowHeight - 1) - (fodder.getImageHeight() * 3) - 48) {
-                    whenPlayerIsDead();
-                }
+        Iterator<Fodder> fodders = fodderList.iterator();
+        while (fodders.hasNext()) {
+            Fodder fodder = fodders.next();
+            fodder.renderFodder(gc);
+            System.out.println("fodder id: " + fodder.getThisFodderId() + " fodder Y position: " + fodder.getPositionY());
+            if (collisionDetection(fodder.getBoundaryOfFodder(), cannon.getBoundaryOfCannonBall())) {
+                fodders.remove();
+                whenCollidedWithFodder();
+            }
+            if (fodder.getPositionY() >= (windowHeight - 1) - (fodder.getImageHeight() * 3) - 48) {
+                whenPlayerIsDead();
+                break;
             }
         }
         renderInformation(gc);
-
     }//End of render game round.
 
     public void whenCollidedWithFodder() {
@@ -107,12 +109,13 @@ public class GameRound {
     }
 
     public void whenPlayerIsDead() {
-        setPlayerKilled(true);
-        cannon.setCannonBall(false);
-        setRoundStillGoing(false);
         for (Fodder fod : fodderList) {
             fod.setFodderSpeed(0);
         }
+        setPlayerKilled(true);
+        cannon.setCannonBall(false);
+        setRoundStillGoing(false);
+
     }
 
     public void renderRedBorderRectangle(GraphicsContext gc) {
@@ -121,11 +124,11 @@ public class GameRound {
     }
 
     public void renderGradientBackgroundRectangles(GraphicsContext gc, Color firstColor, Color secondColor) {
-        Stop[] stops = { new Stop(0, firstColor), new Stop(1, secondColor)};
+        Stop[] stops = {new Stop(0, firstColor), new Stop(1, secondColor)};
         LinearGradient lg = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, stops);
         gc.setFill(lg);
         gc.fillRect(0, (windowHeight - 1) - (cannon.getImageHeight() * 2) - 47, windowWidth, 99);
-        Stop[] stops2 = { new Stop(0, secondColor), new Stop(1, firstColor)};
+        Stop[] stops2 = {new Stop(0, secondColor), new Stop(1, firstColor)};
         LinearGradient lg2 = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, stops2);
         gc.setFill(lg2);
         gc.fillRect(0, (windowHeight - 1) - 49, windowWidth, 55);
@@ -150,6 +153,9 @@ public class GameRound {
         //String fps = ("Fps: ");
     }
 
+    public void clearFodderList() {
+        fodderList.clear();
+    }
 
     public boolean isPlayerKilled() {
         return playerKilled;
