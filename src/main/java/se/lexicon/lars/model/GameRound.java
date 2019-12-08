@@ -88,13 +88,13 @@ public class GameRound {
         while (fodders.hasNext()) {
             Fodder fodder = fodders.next();
             fodder.renderFodder(gc);
-            System.out.println("fodder id: " + fodder.getThisFodderId() + " fodder Y position: " + fodder.getPositionY());
+            //System.out.println("fodder id: " + fodder.getThisFodderId() + " fodder Y position: " + fodder.getPositionY());
             if (collisionDetection(fodder.getBoundaryOfFodder(), cannon.getBoundaryOfCannonBall())) {
                 fodders.remove();
                 whenCollidedWithFodder();
             }
             if (fodder.getPositionY() >= (windowHeight - 1) - (fodder.getImageHeight() * 3) - 48) {
-                whenPlayerIsDead();
+                whenPlayerIsDead(gc);
                 break;
             }
 
@@ -109,9 +109,10 @@ public class GameRound {
         totalGameScore = totalGameScore + 10;
     }
 
-    public void whenPlayerIsDead() {
+    public void whenPlayerIsDead(GraphicsContext gc) {
         for (Fodder fod : fodderList) {
             fod.setFodderSpeed(0);
+            fod.renderFodder(gc);
         }
         setPlayerKilled(true);
         cannon.setCannonBall(false);
@@ -143,7 +144,7 @@ public class GameRound {
         gc.fillText(totalScore, 10, 25);
         String roundScore = ("Kills this round: " + getRoundScore());
         gc.fillText(roundScore, 10, 56);
-        String fodderLeft = ("Fodder left to kill: " + getAmountOfFodder());
+        String fodderLeft = ("Fodder left to kill this level: " + getAmountOfFodder());
         gc.fillText(fodderLeft, 10, 87);
         String level = ("Level: " + getLevel());
         gc.fillText(level, 10, 118);
@@ -171,11 +172,14 @@ public class GameRound {
         return new Rectangle2D(x, y, width, height).intersects(new Rectangle2D(x2, y2, width2, height2));
     }
 
-    //Todo might have ruined something here? Certain objects is dissapearing without collision.
+    //Todo might have ruined something here? Certain objects is disappearing without collision.
     //Check if object1 collides with object2
     public boolean collisionDetection(Rectangle2D object1, Rectangle2D object2) {
+
         if(object1.intersects(object2)) {
+            System.out.println("collision detected.");
             object2 = null;
+            object1 = null;
             return true;
         }
         return false;
