@@ -10,6 +10,7 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import se.lexicon.lars.model.fodders.Rambo;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -24,6 +25,7 @@ public class GameRound {
 
     private Cannon cannon = new Cannon();
     private ArrayList<Fodder> fodderList = new ArrayList<>();
+    private ArrayList<Rambo> ramboList = new ArrayList<>();
     private int roundScore;
     private int amountOfFodder;
     private double fodderSpeed;
@@ -51,13 +53,24 @@ public class GameRound {
     private ArrayList<Fodder> generateFodder() {
         fodderList.clear();
         for (int i = 0; i < amountOfFodder; i++) {
-            fodderList.add(new Fodder(getFodderSpeed(), "Images/rambo2.gif"));
+            fodderList.add(new Rambo(getFodderSpeed(), "Images/rambo2.gif"));
         }
         if (fodderList.isEmpty()) {
             return null;
         }
         return fodderList;
     }
+
+/*    private ArrayList<Rambo> generateRambo() {
+        ramboList.clear();
+        for (int i = 0; i < amountOfFodder; i++) {
+            ramboList.add(new Rambo(getFodderSpeed(), "Images/rambo2.gif"));
+        }
+        if (ramboList.isEmpty()) {
+            return null;
+        }
+        return ramboList;
+    }*/
 
 /*    private ArrayList<Fodder> generateFodder() {
         fodderList.clear();
@@ -191,7 +204,7 @@ public class GameRound {
     public boolean collisionDetection(Rectangle2D object1, Rectangle2D object2) {
 
         if(object1.intersects(object2)) {
-            System.out.println("collision detected.");
+            //System.out.println("collision detected.");
             object2 = null;
             object1 = null;
             return true;

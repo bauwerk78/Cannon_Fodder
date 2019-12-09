@@ -13,11 +13,12 @@ public class Rambo extends Fodder {
     protected void moveFodder() {
         setPositionY(getPositionY() + getFodderSpeed() * GameRound.elapsedTime);
         int randomXDirection = rand.nextInt(2);
+        //TODO fix the jittery movement back and forth.
         if(randomXDirection == 0) {
-            setPositionX(getPositionX() - getFodderSpeed() * GameRound.elapsedTime);
+            setPositionX(getPositionX() - (getFodderSpeed() * GameRound.elapsedTime));
         }
         if(randomXDirection == 1) {
-            setPositionX(getPositionX() + getFodderSpeed() * GameRound.elapsedTime);
+            setPositionX(getPositionX() + (getFodderSpeed() * GameRound.elapsedTime));
         }
         if(getPositionX() < 0) {
             setPositionX(0);

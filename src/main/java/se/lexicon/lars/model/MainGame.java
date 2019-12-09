@@ -15,7 +15,7 @@ import javafx.scene.input.MouseEvent;
 public class MainGame extends GameRound {
 
     Image image;
-    Image chuckImage = null;
+    Image chuckImage;
     public static int totalGameScore;
     public static int level;
     boolean gameLost = false;
@@ -26,7 +26,6 @@ public class MainGame extends GameRound {
     }
 
     public void initNewGame() {
-
         setTotalGameScore(0);
         setLevel(1);
         Fodder.fodderId = 0;
@@ -34,8 +33,6 @@ public class MainGame extends GameRound {
     }
 
     public Image newGameBanner(GraphicsContext gc, Scene scene) {
-        //image = new Image("file:Images/newgameimage2.png");
-//        image = new Image("file:Images/chuck2.gif", true);
         image = new Image("file:Images/newgameimage2.png");
         Image chuck = new Image("file:Images/chuck2.gif");
         scene.setOnKeyPressed(
@@ -48,7 +45,6 @@ public class MainGame extends GameRound {
                         }
                     }
                 });
-
         System.out.println("newGameBanner triggered.");
         return chuck;
     }
@@ -65,7 +61,6 @@ public class MainGame extends GameRound {
             setPlayerKilled(false);
             //gameLost = true;
             chuckImage = newGameBanner(gc, scene);
-
         }
         if (isRoundStillGoing() && !isPlayerKilled()) {
             chuckImage = null;
@@ -73,6 +68,7 @@ public class MainGame extends GameRound {
             //System.out.println("Round still going.");
             renderGameRound(gc, scene, currentNanoTime);
         }
+        //Just for testing.
         if (gameLost) {
             image = new Image("file:Images/chuck2.gif");
             gc.drawImage(image, (Graphics.windowWidth / 2d) - 230, (Graphics.windowHeight / 2d) - 50);
