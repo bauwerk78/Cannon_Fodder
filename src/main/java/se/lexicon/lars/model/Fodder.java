@@ -7,13 +7,13 @@ import javafx.scene.image.Image;
 import java.util.Random;
 
 import static se.lexicon.lars.model.Graphics.windowWidth;
+import static se.lexicon.lars.model.Graphics.windowHeight;
 
 public class Fodder {
 
     public static int fodderId = 0;
     //Todo potentially give different fodder hp so it needs more hits so be removed.
     private static Random rand = new Random();
-    //public static boolean playerKilled = false;
 
     private Image fodderImage;
     private double positionX;
@@ -24,7 +24,7 @@ public class Fodder {
     private int thisFodderId;
 
     public Fodder() {
-        setFodderImage();
+        setFodderImage("Images/rambo1.png");
         setPositionX(randomXPosition());
         setPositionY(-randomYPosition());
         setFodderSpeed(100);
@@ -33,7 +33,7 @@ public class Fodder {
     }
 
     public Fodder(double speed) {
-        setFodderImage();
+        setFodderImage("Images/rambo1.png");
         setPositionX(randomXPosition());
         setPositionY(-randomYPosition());
         setFodderSpeed(speed);
@@ -53,8 +53,8 @@ public class Fodder {
         return rand.nextInt(700) + 50;
     }
 
-    private void setFodderImage() {
-        fodderImage = new Image("file:Images/rambo1.png", 50, 50, false, false);
+    private void setFodderImage(String fodderImagePath) {
+        fodderImage = new Image("file:" + fodderImagePath, 50, 50, false, false);
         setImageWidth(fodderImage.getWidth());
         setImageHeight(fodderImage.getHeight());
     }
