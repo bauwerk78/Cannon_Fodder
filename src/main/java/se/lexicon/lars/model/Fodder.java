@@ -6,15 +6,17 @@ import javafx.scene.image.Image;
 
 import java.util.Random;
 
-import static se.lexicon.lars.model.Graphics.windowWidth;
-import static se.lexicon.lars.model.Graphics.windowHeight;
+//import static se.lexicon.lars.model.Graphics.windowWidth;
+//import static se.lexicon.lars.model.Graphics.windowHeight;
 
 public class Fodder {
 
     public static int fodderId = 0;
     //Todo potentially give different fodder hp so it needs more hits so be removed.
-    private static Random rand = new Random();
+    protected static Random rand = new Random();
 
+    protected double windowWidth = Graphics.windowWidth;
+    protected double windowHeight = Graphics.windowHeight;
     private Image fodderImage;
     private double positionX;
     private double positionY;
@@ -32,8 +34,8 @@ public class Fodder {
 
     }
 
-    public Fodder(double speed) {
-        setFodderImage("Images/rambo1.png");
+    public Fodder(double speed, String imagePath) {
+        setFodderImage(imagePath);
         setPositionX(randomXPosition());
         setPositionY(-randomYPosition());
         setFodderSpeed(speed);
@@ -59,7 +61,7 @@ public class Fodder {
         setImageHeight(fodderImage.getHeight());
     }
 
-    private void moveFodder() {
+    protected void moveFodder() {
         double newPosition = getPositionY();
         newPosition += getFodderSpeed() * GameRound.elapsedTime;
         setPositionY(newPosition);

@@ -112,6 +112,7 @@ public class Cannon {
 
     private void setCannonImage() {
         cannonImage = new Image("file:Images/cannon2.png", 50, 50, false, false);
+        //cannonImage = new Image("file:Images/chuck2.gif", 50, 50, false, false);
         imageWidth = cannonImage.getWidth();
         imageHeight = cannonImage.getHeight();
     }

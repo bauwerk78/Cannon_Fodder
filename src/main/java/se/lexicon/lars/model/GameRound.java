@@ -3,6 +3,7 @@ package se.lexicon.lars.model;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -28,6 +29,7 @@ public class GameRound {
     private double fodderSpeed;
     private boolean roundStillGoing = true;
     private boolean playerKilled = false;
+    Image image;
 
     public GameRound() {
     }
@@ -49,13 +51,25 @@ public class GameRound {
     private ArrayList<Fodder> generateFodder() {
         fodderList.clear();
         for (int i = 0; i < amountOfFodder; i++) {
-            fodderList.add(new Fodder(getFodderSpeed()));
+            fodderList.add(new Fodder(getFodderSpeed(), "Images/rambo2.gif"));
         }
         if (fodderList.isEmpty()) {
             return null;
         }
         return fodderList;
     }
+
+/*    private ArrayList<Fodder> generateFodder() {
+        fodderList.clear();
+        for (int i = 0; i < amountOfFodder; i++) {
+            fodderList.add(new Fodder(getFodderSpeed(), "Images/rambo2.gif"));
+        }
+        if (fodderList.isEmpty()) {
+            return null;
+        }
+        return fodderList;
+    }*/
+
 
     protected Cannon createCannon() {
         return new Cannon();

@@ -15,9 +15,10 @@ import javafx.scene.input.MouseEvent;
 public class MainGame extends GameRound {
 
     Image image;
+    Image chuckImage = null;
     public static int totalGameScore;
     public static int level;
-
+    boolean gameLost = false;
 
     public MainGame(int level) {
         super(level);
@@ -32,20 +33,24 @@ public class MainGame extends GameRound {
         resetCannon();
     }
 
-    public void newGameBanner(GraphicsContext gc, Scene scene) {
+    public Image newGameBanner(GraphicsContext gc, Scene scene) {
+        //image = new Image("file:Images/newgameimage2.png");
+//        image = new Image("file:Images/chuck2.gif", true);
         image = new Image("file:Images/newgameimage2.png");
+        Image chuck = new Image("file:Images/chuck2.gif");
         scene.setOnKeyPressed(
                 new EventHandler<KeyEvent>() {
-
                     public void handle(KeyEvent event) {
                         if (event.getCode().toString().contains("ENTER")) {
                             initNewGame();
                             initNewRound(level);
+                            gameLost = false;
                         }
                     }
                 });
-        gc.drawImage(image, (Graphics.windowWidth / 2d) - 150, (Graphics.windowHeight / 2d) - 50);
+
         System.out.println("newGameBanner triggered.");
+        return chuck;
     }
 
     public void renderGame(Group group, GraphicsContext gc, Scene scene, long currentNanoTime) {
@@ -58,12 +63,23 @@ public class MainGame extends GameRound {
         if (isPlayerKilled()) {
             System.out.println("Player is dead.");
             setPlayerKilled(false);
-            newGameBanner(gc, scene);
+            //gameLost = true;
+            chuckImage = newGameBanner(gc, scene);
+
         }
         if (isRoundStillGoing() && !isPlayerKilled()) {
+            chuckImage = null;
+            image = null;
             //System.out.println("Round still going.");
             renderGameRound(gc, scene, currentNanoTime);
         }
+        if (gameLost) {
+            image = new Image("file:Images/chuck2.gif");
+            gc.drawImage(image, (Graphics.windowWidth / 2d) - 230, (Graphics.windowHeight / 2d) - 50);
+            System.out.println("game lost");
+        }
+        gc.drawImage(chuckImage, (Graphics.windowWidth / 2d) - 230, (Graphics.windowHeight / 2d) - 50);
+        gc.drawImage(image, (Graphics.windowWidth / 2d) - 150, (Graphics.windowHeight / 2d) - 50);
         gameTimer(currentNanoTime);
     }
 
