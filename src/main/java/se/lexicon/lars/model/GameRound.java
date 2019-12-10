@@ -31,15 +31,14 @@ public class GameRound {
     private double fodderSpeed;
     private boolean roundStillGoing = true;
     private boolean playerKilled = false;
-    private Image explosion1 = new Image("file:Images/explosionfromabove1.png", 50, 50, false, false);
+    private Image explosion1 = new Image("file:Images/explosionfromabove2.png", 50, 50, false, true);
     private double explosion1ImageWidth = 50;
     private double explosion1ImageHeight = 50;
     private double explosionPosX;
     private double explosionPosY;
     private double explosionTimer = 0;
     private boolean fodderExploded = false;
-
-    Image image;
+    private Image backgroundImage = new Image("file:Images/desert1.jpg", 800, 600, false, false);
 
     public GameRound() {
     }
@@ -69,29 +68,6 @@ public class GameRound {
         return fodderList;
     }
 
-/*    private ArrayList<Rambo> generateRambo() {
-        ramboList.clear();
-        for (int i = 0; i < amountOfFodder; i++) {
-            ramboList.add(new Rambo(getFodderSpeed(), "Images/rambo2.gif"));
-        }
-        if (ramboList.isEmpty()) {
-            return null;
-        }
-        return ramboList;
-    }*/
-
-/*    private ArrayList<Fodder> generateFodder() {
-        fodderList.clear();
-        for (int i = 0; i < amountOfFodder; i++) {
-            fodderList.add(new Fodder(getFodderSpeed(), "Images/rambo2.gif"));
-        }
-        if (fodderList.isEmpty()) {
-            return null;
-        }
-        return fodderList;
-    }*/
-
-
     protected Cannon createCannon() {
         return new Cannon();
     }
@@ -113,6 +89,7 @@ public class GameRound {
         //System.out.println(getFodderSpeed());
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, windowWidth, windowHeight);
+        //renderBackgroundImage(gc);
         renderRedBorderRectangle(gc);
         renderGradientBackgroundRectangles(gc, Color.BLACK, Color.DARKGREEN);
         cannon.renderCannon(gc, scene);
@@ -157,6 +134,10 @@ public class GameRound {
         cannon.setCannonBall(false);
         setRoundStillGoing(false);
 
+    }
+
+    public void renderBackgroundImage(GraphicsContext gc) {
+        gc.drawImage(backgroundImage, 0, 0);
     }
 
     public void setExplosionPosition(double positionX, double positionY) {

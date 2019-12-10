@@ -1,6 +1,5 @@
 package se.lexicon.lars.model;
 
-import com.sun.javafx.iio.ImageStorageException;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -37,7 +36,7 @@ public class Cannon {
         setCannonImage();
         setPositionX((windowWidth / 2));
         setPositionY((windowHeight - 1) - imageHeight - 49);
-        setCannonSpeed(5);
+        setCannonSpeed(6);
         cannonId++;
 
     }
@@ -132,7 +131,7 @@ public class Cannon {
         setCannonBallY(getPositionY());
         setCannonBallWidth(10);
         setCannonBallHeight(10);
-        setCannonBallSpeed(3);
+        setCannonBallSpeed(5);
         gc.setFill(Color.RED);
         gc.fillOval(getCannonBallX(), getCannonBallY(), getCannonBallWidth(), getCannonBallHeight());
     }
