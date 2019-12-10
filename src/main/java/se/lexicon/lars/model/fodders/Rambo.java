@@ -15,7 +15,7 @@ public class Rambo extends Fodder {
 
 //TODO all beneath this.
     public boolean delayer() {
-        int secondsToDelay = 2;
+        int secondsToDelay = rand.nextInt(3) + 1;
         if (timeCounter < secondsToDelay) {
             timeCounter += GameRound.elapsedTime;
             return true;

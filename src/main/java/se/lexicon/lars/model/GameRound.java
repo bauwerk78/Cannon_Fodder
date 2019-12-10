@@ -31,6 +31,14 @@ public class GameRound {
     private double fodderSpeed;
     private boolean roundStillGoing = true;
     private boolean playerKilled = false;
+    private Image explosion1 = new Image("file:Images/explosionfromabove1.png", 50, 50, false, false);
+    private double explosion1ImageWidth = 50;
+    private double explosion1ImageHeight = 50;
+    private double explosionPosX;
+    private double explosionPosY;
+    private double explosionTimer = 0;
+    private boolean fodderExploded = false;
+
     Image image;
 
     public GameRound() {
@@ -117,19 +125,23 @@ public class GameRound {
             fodder.renderFodder(gc);
             //System.out.println("fodder id: " + fodder.getThisFodderId() + " fodder Y position: " + fodder.getPositionY());
             if (collisionDetection(fodder.getBoundaryOfFodder(), cannon.getBoundaryOfCannonBall())) {
+                setExplosionPosition(fodder.getPositionX(), fodder.getPositionY());
+                renderExplosion(gc);
                 fodders.remove();
-                whenCollidedWithFodder();
+                whenCollidedWithFodder(gc);
             }
             if (fodder.getPositionY() >= (windowHeight - 1) - (fodder.getImageHeight() * 3) - 48) {
                 whenPlayerIsDead(gc);
                 break;
             }
-
+        }
+        if (fodderExploded) {
+            renderExplosion(gc);
         }
         renderInformation(gc);
     }//End of render game round.
 
-    public void whenCollidedWithFodder() {
+    public void whenCollidedWithFodder(GraphicsContext gc) {
         setAmountOfFodder(getAmountOfFodder() - 1);
         cannon.setCannonBall(false);
         setRoundScore(getRoundScore() + 1);
@@ -145,6 +157,29 @@ public class GameRound {
         cannon.setCannonBall(false);
         setRoundStillGoing(false);
 
+    }
+
+    public void setExplosionPosition(double positionX, double positionY) {
+        explosionPosX = positionX;
+        explosionPosY = positionY;
+    }
+
+    public boolean explosionTimer() {
+        int secondsToDelay = 1;
+        if (explosionTimer < secondsToDelay) {
+            explosionTimer += GameRound.elapsedTime;
+            fodderExploded = true;
+            return true;
+        }
+        explosionTimer = 0;
+        fodderExploded = false;
+        return false;
+    }
+
+    public void renderExplosion(GraphicsContext gc) {
+        if (explosionTimer()) {
+            gc.drawImage(explosion1, explosionPosX, explosionPosY);
+        }
     }
 
     public void renderRedBorderRectangle(GraphicsContext gc) {
@@ -202,8 +237,7 @@ public class GameRound {
     //Todo might have ruined something here? Certain objects is disappearing without collision.
     //Check if object1 collides with object2
     public boolean collisionDetection(Rectangle2D object1, Rectangle2D object2) {
-
-        if(object1.intersects(object2)) {
+        if (object1.intersects(object2)) {
             //System.out.println("collision detected.");
             object2 = null;
             object1 = null;
